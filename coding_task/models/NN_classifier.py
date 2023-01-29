@@ -52,7 +52,7 @@ class NeuralNetworkModel:
         # using binary cross entropy loss as it is a binary classification task
         self.loss_fn = nn.BCELoss()
 
-        self.optimizer = torch.optim.Adam(self.net.parameters(), lr=lr)
+        self.optimizer = torch.optim.SGD(self.net.parameters(), lr=lr)
         self.epochs = epochs
 
     def fit(self, x_train: pd.DataFrame, y_train: pd.DataFrame):
