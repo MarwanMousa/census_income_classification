@@ -164,7 +164,4 @@ def feature_engineering(dataset: pd.DataFrame) -> pd.DataFrame:
 
     dataset['full or part time employment stat'] = dataset['full or part time employment stat'].map(employment_mapping)
 
-
     return dataset
-
-
