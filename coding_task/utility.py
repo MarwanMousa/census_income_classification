@@ -1,5 +1,5 @@
 """
-
+A script with utility functions for getting data in the right format, training the model and getting performance metrics
 """
 from typing import Optional, Union, List
 import pandas
