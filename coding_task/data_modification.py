@@ -1,13 +1,23 @@
 """
-This is a script contains functions for cleaning the raw input data.
+This is a script contains functions for processing the raw input data.
 
-This script performs cleaning for this particular dataset only, and expect the data to be named
-'census_income_learn.csv' and 'census_income_test.csv' for the training and test datasets respectively
+Three functions are defined, clean_dataset(), feature_engineering(), preprocess()
+
+-The first function is in charge of cleaning the raw dataset by adding column headings, removing unnecessary columns and
+removing any NaNs.
+
+-The second performs some feature engineering, turning binary categorical variables into booleans and reducing some of
+classes in some categorical variables (see Exploratory_Data_Analysis.ipynb for more details)
+
+-The third pre-process the data (one hot encoding and scaling) in order for the data to be used to train classifiers.
+
+This script has functionality for cleaning this particular dataset only and expec
 
 """
 
 import numpy as np
 import pandas as pd
+from sklearn.preprocessing import MinMaxScaler
 
 
 def clean_dataset(location: str) -> pd.DataFrame:
@@ -15,7 +25,6 @@ def clean_dataset(location: str) -> pd.DataFrame:
 
     Args:
         location: location of the data file relative to the directory the script runs in
-        save_name: filename of the clean dataset if it is to be saved, it not saved by default
     Returns:
 
         A pandas Dataframe with the clean dataset
@@ -65,9 +74,9 @@ def clean_dataset(location: str) -> pd.DataFrame:
 
     df_raw = df_raw.replace(' ?', np.nan)
     df_raw = df_raw.replace(' Not in universe', np.nan)
-    df_raw = df_raw.dropna()
+    df_clean = df_raw.dropna()
 
-    return df_raw
+    return df_clean
 
 
 def feature_engineering(dataset: pd.DataFrame) -> pd.DataFrame:
@@ -165,3 +174,45 @@ def feature_engineering(dataset: pd.DataFrame) -> pd.DataFrame:
     dataset['full or part time employment stat'] = dataset['full or part time employment stat'].map(employment_mapping)
 
     return dataset
+
+
+def preprocess(train_dataset: pd.DataFrame, test_dataset: pd.DataFrame, target: str) -> (pd.DataFrame, pd.DataFrame):
+    """
+    This functions takes in the cleaned training and test datasets and preprocesses the data for any ML task
+    It applied one-hot encoding to the categorical variables and scales the numerical variables using a min-max scaler
+
+    Args:
+        train_dataset: A dataframe containing the clean feature engineered training dataset
+        test_dataset: A dataframe containing the clean feature engineered test dataset
+        target: The name of the target variable
+
+    Returns:
+        A tuple of two pandas dataframes where the first is the pre-processed training dataset and the second is the
+        the preprocessed test dataset
+
+    """
+
+    # Extract categorical variable names
+    categorical_cols = train_dataset.columns[train_dataset.dtypes == object].tolist()
+
+    # Get dummy variables for categorical data
+    train_dataset_new = pd.get_dummies(train_dataset, columns=categorical_cols)
+    test_dataset_new = pd.get_dummies(test_dataset, columns=categorical_cols)
+
+    # Extract numerical variable names
+    numerical_columns = [col for col in train_dataset if col not in categorical_cols + [target]]
+
+    # Get min max-scaler
+    mms = MinMaxScaler()
+
+    # Fit scaler to training data and transform it
+    min_max_scaled_columns_train = mms.fit_transform(train_dataset_new[numerical_columns])
+    # Using fit to training data, transform the test data
+    min_max_scaled_columns_test = mms.transform(test_dataset_new[numerical_columns])
+
+    # Update the columns with their scaled versions
+    for i, col in enumerate(numerical_columns):
+        train_dataset_new[col] = min_max_scaled_columns_train[:, i]
+        test_dataset_new[col] = min_max_scaled_columns_test[:, i]
+
+    return train_dataset_new, test_dataset_new
