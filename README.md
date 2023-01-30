@@ -31,4 +31,4 @@ Once cloned the following steps need to be done first. (Ignore step 1 if poetry 
    
   Alternatively, the dependencies in the poetry toml can be manually installed in a virtual environment with Python (>= 3.8 < 4) using pip.
   
-  For the code to run, the dataset needs to be downloaded and added to the repo first. Follow the steps outlined in the `coding_task` directory
+  For the code to run, the dataset needs to be downloaded and added to the repo first. Follow the steps outlined in the `coding_task` directory.
