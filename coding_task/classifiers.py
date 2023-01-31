@@ -23,7 +23,6 @@ import numpy as np
 import torch
 
 from sklearn.linear_model import LogisticRegression
-from sklearn.naive_bayes import GaussianNB
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.neighbors import KNeighborsClassifier
@@ -73,16 +72,6 @@ LR_model1_pred = evaluate_model(LR_model1, x_test)
 # Second model
 LR_model2 = train_model(LogisticRegression(solver='newton-cholesky'), x_train_adj, y_train_adj)
 LR_model2_pred = evaluate_model(LR_model2, x_test)
-
-
-# 2 Naive Bayes
-# First model
-NB_model1 = train_model(GaussianNB(), x_train, y_train)
-NB_model1_pred = evaluate_model(NB_model1, x_test)
-
-# Second model
-NB_model2 = train_model(GaussianNB(), x_train_adj, y_train_adj)
-NB_model2_pred = evaluate_model(NB_model2, x_test)
 
 
 # Decision Tree
@@ -157,16 +146,15 @@ NN_model2_pred = evaluate_model(NN_model2, x_test, y_test)
 # ----- MODEL PERFORMANCE SUMMARY ----- #
 # A list of the names of the models tested
 models = [
-      "Logistic Regression", "Naive Bayes", "Decision Tree", "Random Forest", "Gradient Boosting", "KNN",
-      "Neural Network"
+      "Logistic Regression", "KNN", "Decision Tree", "Random Forest", "Gradient Boosting", "Neural Network"
 ]
 # A list of the models' predictions to the training dataset
 predictions = [
-      LR_model1_pred, NB_model1_pred, DT_model1_pred, RF_model1_pred, KNN_model1_pred, GB_model1_pred, NN_model1_pred
+      LR_model1_pred, KNN_model1_pred, DT_model1_pred, RF_model1_pred, GB_model1_pred, NN_model1_pred
 ]
 # A list of the models' predictions to the minority class up-sampled training dataset
 predictions_adj = [
-      LR_model2_pred, NB_model2_pred, DT_model2_pred, RF_model2_pred, KNN_model2_pred, GB_model2_pred, NN_model2_pred
+      LR_model2_pred, KNN_model2_pred, DT_model2_pred, RF_model2_pred, GB_model2_pred, NN_model2_pred
 ]
 
 print('Regular Training Dataset')
