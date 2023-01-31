@@ -44,7 +44,8 @@ class Network(nn.Module):
 # A class defining the neural network classifier model
 # It implements two methods, fit and predict to train and evaluate the model respectively
 class NeuralNetworkModel:
-    def __init__(self, input_dim, hidden_dim, network, batch_size=64, lr=0.1, epochs=10):
+    def __init__(self, input_dim: int, hidden_dim: int, network, batch_size: int = 64, lr: float = 0.1,
+                 epochs: int = 10):
         # Instantiate neural network
         self.net = network(input_dim, hidden_dim)
         self.batch_size = batch_size
