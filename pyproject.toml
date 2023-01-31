@@ -2,11 +2,11 @@
 name = "dataiku_task"
 version = "0.1.0"
 description = ""
-authors = ["Marwan Mousa <marwan.mousa15@imperial.ac.uk>"]
+authors = ["Marwan Mousa <marwanmousa977@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "<3.12,>=3.8"
-numpy = "^1.24.1"
+numpy = "<1.24.0"
 scipy = "^1.10.0"
 scikit-learn = "^1.2.1"
 pandas = "^1.5.3"
