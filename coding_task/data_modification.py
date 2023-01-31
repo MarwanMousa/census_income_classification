@@ -14,7 +14,7 @@ classes in some categorical variables (see Exploratory_Data_Analysis.ipynb for m
 This script has functionality for cleaning this particular dataset only and expec
 
 """
-
+import os
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
@@ -31,7 +31,8 @@ def clean_dataset(location: str) -> pd.DataFrame:
 
     """
     # Make sure the input is a string
-    assert isinstance(location, str)
+    assert isinstance(location, str), "Provided file path/location must be string"
+    assert os.path.isfile(location), "Provided path must point to a valid file"
 
     # Load in data
     df_raw = pd.read_csv(location)
@@ -88,6 +89,8 @@ def feature_engineering(dataset: pd.DataFrame) -> pd.DataFrame:
     Returns:
 
     """
+
+    assert isinstance(dataset, pd.DataFrame), "Input must be a pandas dataframe"
 
     # Outcome is binary so we convert it to 0, 1
     dataset['income'] = dataset['income'].map({' - 50000.': 0, ' 50000+.': 1})
@@ -191,6 +194,12 @@ def preprocess(train_dataset: pd.DataFrame, test_dataset: pd.DataFrame, target: 
         the preprocessed test dataset
 
     """
+
+    assert isinstance(train_dataset, pd.DataFrame), "Train data is expected as pandas dataframe"
+    assert isinstance(train_dataset, pd.DataFrame), "Test data is expected as pandas dataframe"
+    assert tuple(list(train_dataset.columns)) == tuple(list(test_dataset.columns)), "Train and Test data columns must match"
+    assert isinstance(target, str), "The target must be a string name of a column"
+    assert target in list(train_dataset.columns), "Provided target must be a valid column name is the dataset"
 
     # Extract categorical variable names
     categorical_cols = train_dataset.columns[train_dataset.dtypes == object].tolist()

@@ -28,6 +28,12 @@ def get_train_test_data(train_data: pd.DataFrame, test_data: pd.DataFrame, targe
     Returns:
         a tuple of four pandas dataframes with 1. training features 2. training targets 3. test features 4. test targets
     """
+    assert isinstance(train_data, pandas.DataFrame), "Train data is expected as pandas dataframe"
+    assert isinstance(train_data, pandas.DataFrame), "Test data is expected as pandas dataframe"
+    assert tuple(list(train_data.columns)) == tuple(list(test_data.columns)), "Train and Test data columns must match"
+    assert isinstance(target, str), "The target must be a string name of a column"
+    assert target in list(train_data.columns), "Provided target must be a valid column name is the dataset"
+    assert isinstance(imbalance_adjustment, bool), "imbalance_adjustment must be a boolean value"
 
     x_train = train_data.drop(target, axis=1)
     y_train = train_data[target]
@@ -41,7 +47,7 @@ def get_train_test_data(train_data: pd.DataFrame, test_data: pd.DataFrame, targe
     return x_train, y_train, x_test, y_test
 
 
-def train_model(model, x_train, y_train):
+def train_model(model, x_train: pd.DataFrame, y_train: pd.Series):
     """
     A utility function for training an untrained model on the training data
     Args:
@@ -52,11 +58,13 @@ def train_model(model, x_train, y_train):
     Returns:
         the trained model
     """
+    assert isinstance(x_train, pandas.DataFrame), "Train features are expected as pandas dataframe"
+    assert isinstance(y_train, pandas.Series), "Train targets are expected as pandas series"
     model.fit(x_train, y_train)
     return model
 
 
-def evaluate_model(model, x_test: pandas.DataFrame, y_test: Optional[pandas.DataFrame] = None):
+def evaluate_model(model, x_test: pandas.DataFrame, y_test: Optional[pandas.Series] = None):
     """
     A utility function for getting the predictions of a trained model
     Args:
@@ -67,9 +75,12 @@ def evaluate_model(model, x_test: pandas.DataFrame, y_test: Optional[pandas.Data
     Returns:
 
     """
+    assert isinstance(x_test, pandas.DataFrame), "Train features are expected as pandas dataframe"
+
     if y_test is None:
         predictions = model.predict(x_test)
     else:
+        assert isinstance(y_test, pandas.Series), "Train targets are expected as pandas series"
         predictions = model.predict(x_test, y_test)
 
     return predictions
