@@ -1,4 +1,4 @@
-# Dataiku Task
+
 
 This repo contain all the files for the data modelling task of income classification problem for U.S. census data 
 
